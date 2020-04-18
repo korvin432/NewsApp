@@ -1,5 +1,6 @@
 package com.mindyapps.android.newsapp.data.network
 
+import android.util.Log
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.mindyapps.android.newsapp.data.model.TopHeadlinesResponse
 import kotlinx.coroutines.Deferred
@@ -18,7 +19,7 @@ interface NewsApi {
     @GET("top-headlines")
     fun getTopHeadlines(
         @Query("country") country: String,
-        @Query("country") category: String
+        @Query("category") category: String
     ): Deferred<TopHeadlinesResponse>
 
     companion object {
@@ -37,6 +38,7 @@ interface NewsApi {
                     .newBuilder()
                     .url(url)
                     .build()
+                Log.d("qwwe", url.toString())
                 return@Interceptor chain.proceed(request)
             }
 

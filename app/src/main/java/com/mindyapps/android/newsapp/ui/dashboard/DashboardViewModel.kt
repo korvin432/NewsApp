@@ -3,11 +3,14 @@ package com.mindyapps.android.newsapp.ui.dashboard
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mindyapps.android.newsapp.data.repository.NewsRepository
+import com.mindyapps.android.newsapp.internal.lazyDeferred
 
-class DashboardViewModel : ViewModel() {
+class DashboardViewModel(
+    private val newsRepository: NewsRepository
+) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
+    val topHeadlines by lazyDeferred{
+        newsRepository.getTopHeadlines()
     }
-    val text: LiveData<String> = _text
 }
