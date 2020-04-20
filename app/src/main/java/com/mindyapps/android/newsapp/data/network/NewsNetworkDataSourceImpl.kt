@@ -17,7 +17,7 @@ class NewsNetworkDataSourceImpl(
     override suspend fun fetchTopHeadlines(category:String, country:String) {
         try {
             val fetchedTopHeadlines = apiService
-                .getTopHeadlines(country,category)
+                .getTopHeadlinesAsync(country,category)
                 .await()
             _downloadedTopHeadlines.postValue(fetchedTopHeadlines)
         }

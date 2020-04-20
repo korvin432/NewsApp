@@ -14,8 +14,9 @@ import com.mindyapps.android.newsapp.data.model.Article
 import kotlinx.android.synthetic.main.news_item.view.*
 
 class NewsRecyclerAdapter(
-    private var articles: List<Article>
+    private var articles: MutableList<Article>
 ) : RecyclerView.Adapter<NewsRecyclerAdapter.NewsHolder>()  {
+
 
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
@@ -25,7 +26,9 @@ class NewsRecyclerAdapter(
         return NewsHolder(itemView)
     }
 
-    override fun getItemCount() =  articles.size
+    override fun getItemCount(): Int {
+       return articles.size
+    }
 
     override fun onBindViewHolder(holder: NewsHolder, position: Int) {
         val article: Article = articles[position]
@@ -33,7 +36,8 @@ class NewsRecyclerAdapter(
     }
 
     fun setArticles(newArticles: List<Article>) {
-        articles = newArticles
+        articles.clear()
+        articles.addAll(newArticles)
         notifyDataSetChanged()
     }
 

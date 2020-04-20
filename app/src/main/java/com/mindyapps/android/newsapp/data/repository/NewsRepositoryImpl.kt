@@ -1,5 +1,6 @@
 package com.mindyapps.android.newsapp.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.mindyapps.android.newsapp.data.model.TopHeadlinesResponse
 import com.mindyapps.android.newsapp.data.network.NewsApi
@@ -12,9 +13,10 @@ class NewsRepositoryImpl(
     private val dataSource: NewsNetworkDataSourceImpl
 ) : NewsRepository {
 
-    override suspend fun getTopHeadlines(): LiveData<TopHeadlinesResponse> {
+    override suspend fun getTopHeadlines(category:String, country:String): LiveData<TopHeadlinesResponse> {
         return withContext(Dispatchers.IO) {
-            dataSource.fetchTopHeadlines("technology", "ru")
+            dataSource.fetchTopHeadlines(category, country)
+            Log.d("qwwe", dataSource.downloadedTopHeadlines.toString())
             return@withContext dataSource.downloadedTopHeadlines
         }
     }

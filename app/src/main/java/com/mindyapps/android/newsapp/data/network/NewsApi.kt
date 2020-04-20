@@ -17,7 +17,7 @@ private const val API_KEY = "34fdffe07ec340dfa8f036eac1756698"
 interface NewsApi {
 
     @GET("top-headlines")
-    fun getTopHeadlines(
+    fun getTopHeadlinesAsync(
         @Query("country") country: String,
         @Query("category") category: String
     ): Deferred<TopHeadlinesResponse>
@@ -38,7 +38,6 @@ interface NewsApi {
                     .newBuilder()
                     .url(url)
                     .build()
-                Log.d("qwwe", url.toString())
                 return@Interceptor chain.proceed(request)
             }
 
