@@ -16,7 +16,6 @@ class NewsRepositoryImpl(
     override suspend fun getTopHeadlines(category:String, country:String): LiveData<TopHeadlinesResponse> {
         return withContext(Dispatchers.IO) {
             dataSource.fetchTopHeadlines(category, country)
-            Log.d("qwwe", dataSource.downloadedTopHeadlines.toString())
             return@withContext dataSource.downloadedTopHeadlines
         }
     }

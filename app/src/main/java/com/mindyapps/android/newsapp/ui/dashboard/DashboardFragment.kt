@@ -66,6 +66,18 @@ class DashboardFragment : ScopedFragment() {
         return root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadNews()
+    }
+
+    private fun loadNews() {
+        launch(Main) {
+            dashboardViewModel.getNewsSource()
+                .observe(viewLifecycleOwner, observerNewsArticle)
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         bindChipGroup(categoryChips, countryChips)
@@ -86,13 +98,8 @@ class DashboardFragment : ScopedFragment() {
                 newsRecyclerAdapter.setArticles(newsSource.articles)
             }
         }
-        launch(Main) {
-            dashboardViewModel.getNewsSource()
-                .observe(viewLifecycleOwner, observerNewsArticle)
-        }
 
         setToolbar()
-        bindUI()
     }
 
     private fun setToolbar() {
