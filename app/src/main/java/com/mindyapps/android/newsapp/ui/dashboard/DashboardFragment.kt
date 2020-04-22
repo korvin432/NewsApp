@@ -7,10 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -27,7 +32,9 @@ import com.mindyapps.android.newsapp.data.repository.NewsRepositoryImpl
 import com.mindyapps.android.newsapp.ui.NewsRecyclerAdapter
 import com.mindyapps.android.newsapp.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import kotlinx.android.synthetic.main.news_item.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
 
@@ -48,50 +55,48 @@ class DashboardFragment : ScopedFragment() {
     private lateinit var observerNewsArticle: Observer<TopHeadlinesResponse>
 
     private val sourceList = ArrayList<Article>()
-
+    private var root: View? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        conn = ConnectivityInterceptorImpl(activity!!.applicationContext)
-        api = NewsApi(conn)
-        dataSourceImpl = NewsNetworkDataSourceImpl(api)
-        repositoryImpl = NewsRepositoryImpl(dataSourceImpl)
-        recyclerView = root.findViewById(R.id.dashboard_recycler)
-        progressBar = root.findViewById(R.id.progress_circular)
-        categoryChips = root.findViewById(R.id.category_chips)
-        countryChips = root.findViewById(R.id.country_chips)
-        searchButton = root.findViewById(R.id.search_button)
+        if (root == null) {
+            root = inflater.inflate(R.layout.fragment_dashboard, container, false)
+            conn = ConnectivityInterceptorImpl(activity!!.applicationContext)
+            api = NewsApi(conn)
+            dataSourceImpl = NewsNetworkDataSourceImpl(api)
+            repositoryImpl = NewsRepositoryImpl(dataSourceImpl)
+            recyclerView = root!!.findViewById(R.id.dashboard_recycler)
+            progressBar = root!!.findViewById(R.id.progress_circular)
+            categoryChips = root!!.findViewById(R.id.category_chips)
+            countryChips = root!!.findViewById(R.id.country_chips)
+            searchButton = root!!.findViewById(R.id.search_button)
+
+            dashboardViewModel =
+                ViewModelProvider(this, DashboardViewModelFactory(repositoryImpl)).get(
+                    DashboardViewModel::class.java
+                )
+            bindChipGroup(categoryChips, countryChips)
+            bindRecyclerView()
+        }
+
         return root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        loadNews()
-    }
-
     private fun loadNews() {
-        launch(Main) {
-            dashboardViewModel.getNewsSource()
-                .observe(viewLifecycleOwner, observerNewsArticle)
+        lifecycleScope.launch {
+            dashboardViewModel.getNewsSource().observe(viewLifecycleOwner, observerNewsArticle)
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindChipGroup(categoryChips, countryChips)
-        bindRecyclerView()
 
         searchButton.setOnClickListener {
+            loadNews()
             progressBar.visibility = View.VISIBLE
             bindUI()
         }
-
-        dashboardViewModel =
-            ViewModelProvider(this, DashboardViewModelFactory(repositoryImpl)).get(
-                DashboardViewModel::class.java
-            )
 
         observerNewsArticle = Observer { newsSource ->
             if (newsSource?.articles != null && newsSource.articles.isNotEmpty()) {
@@ -139,9 +144,29 @@ class DashboardFragment : ScopedFragment() {
 
     private fun bindRecyclerView() {
         linearLayoutManager = LinearLayoutManager(activity!!.applicationContext)
-        newsRecyclerAdapter = NewsRecyclerAdapter(sourceList.toMutableList())
+        newsRecyclerAdapter =
+            NewsRecyclerAdapter(sourceList.toMutableList(), activity!!.applicationContext)
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
+        newsRecyclerAdapter.onItemClick = { article, image ->
+            val bundle = bundleOf(
+                "imageUrl" to article.urlToImage,
+                "title" to article.title,
+                "text" to article.content
+            )
+            val extras = FragmentNavigatorExtras(
+                image to article.urlToImage
+            )
+
+            view!!.findNavController()
+                .navigate(
+                    R.id.action_navigation_dashboard_to_navigation_article,
+                    bundle,
+                    null,
+                    extras
+                )
+        }
+
     }
 
     private fun bindUI() = launch(Main) {

@@ -1,33 +1,41 @@
 package com.mindyapps.android.newsapp.ui
 
+import android.content.Context
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.text.HtmlCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
+import com.mindyapps.android.newsapp.internal.GlideApp
 import kotlinx.android.synthetic.main.news_item.view.*
 
 class NewsRecyclerAdapter(
-    private var articles: MutableList<Article>
-) : RecyclerView.Adapter<NewsRecyclerAdapter.NewsHolder>()  {
+    private var articles: MutableList<Article>,
+    private var context: Context
+) : RecyclerView.Adapter<NewsRecyclerAdapter.NewsHolder>() {
 
+    var onItemClick: ((Article, ImageView) -> Unit)? = null
 
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         viewType: Int
     ): NewsHolder {
-        val itemView: View = LayoutInflater.from(viewGroup.context).inflate(R.layout.news_item, viewGroup, false)
+        val itemView: View =
+            LayoutInflater.from(viewGroup.context).inflate(R.layout.news_item, viewGroup, false)
         return NewsHolder(itemView)
     }
 
     override fun getItemCount(): Int {
-       return articles.size
+        return articles.size
     }
 
     override fun onBindViewHolder(holder: NewsHolder, position: Int) {
@@ -42,12 +50,25 @@ class NewsRecyclerAdapter(
     }
 
     private fun setPropertiesForArticleViewHolder(articleViewHolder: NewsHolder, article: Article) {
-            articleViewHolder.author.text = article.title
-            articleViewHolder.description.text = article.description
+        articleViewHolder.author.text = article.title
+        articleViewHolder.description.text = article.description
+        GlideApp.with(context)
+            .load(article.urlToImage)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .into(articleViewHolder.image)
+        ViewCompat.setTransitionName(articleViewHolder.image, article.urlToImage)
     }
 
     inner class NewsHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val author: TextView by lazy { view.textView_author }
         val description: TextView by lazy { view.textView_description }
+        val image: ImageView by lazy { view.article_image }
+
+        init {
+            itemView.setOnClickListener {
+                onItemClick?.invoke(articles[adapterPosition], image)
+            }
+        }
     }
 }

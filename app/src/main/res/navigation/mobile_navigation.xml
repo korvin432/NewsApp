@@ -9,7 +9,28 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.mindyapps.android.newsapp.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_navigation_article"
+            app:destination="@id/navigation_article" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_article"
+        android:name="com.mindyapps.android.newsapp.ui.article.ArticleFragment"
+        android:label="Article"
+        tools:layout="@layout/fragment_article">
+        <argument
+            android:name="imageUrl"
+            app:argType="string"/>
+        <argument
+            android:name="title"
+            app:argType="string"/>
+        <argument
+            android:name="text"
+            android:defaultValue="No text"
+            app:argType="string"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_search"
