@@ -1,11 +1,9 @@
 package com.mindyapps.android.newsapp.data.model
 
 
-import com.google.gson.annotations.SerializedName
-
 data class Article(
     val author: String,
-    val content: String,
+    val content: String?,
     val description: String,
     val publishedAt: String,
     val source: Source,

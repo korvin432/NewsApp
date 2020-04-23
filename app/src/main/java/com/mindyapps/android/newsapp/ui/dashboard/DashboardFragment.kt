@@ -148,23 +148,15 @@ class DashboardFragment : ScopedFragment() {
             NewsRecyclerAdapter(sourceList.toMutableList(), activity!!.applicationContext)
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
-        newsRecyclerAdapter.onItemClick = { article, image ->
+        newsRecyclerAdapter.onItemClick = { article ->
+            val text = article.content ?: article.description
             val bundle = bundleOf(
                 "imageUrl" to article.urlToImage,
                 "title" to article.title,
-                "text" to article.content
+                "text" to text
             )
-            val extras = FragmentNavigatorExtras(
-                image to article.urlToImage
-            )
-
             view!!.findNavController()
-                .navigate(
-                    R.id.action_navigation_dashboard_to_navigation_article,
-                    bundle,
-                    null,
-                    extras
-                )
+                .navigate(R.id.action_navigation_dashboard_to_navigation_article, bundle)
         }
 
     }

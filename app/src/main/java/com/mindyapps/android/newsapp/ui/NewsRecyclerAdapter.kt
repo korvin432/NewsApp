@@ -23,7 +23,7 @@ class NewsRecyclerAdapter(
     private var context: Context
 ) : RecyclerView.Adapter<NewsRecyclerAdapter.NewsHolder>() {
 
-    var onItemClick: ((Article, ImageView) -> Unit)? = null
+    var onItemClick: ((Article) -> Unit)? = null
 
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
@@ -57,7 +57,6 @@ class NewsRecyclerAdapter(
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
             .into(articleViewHolder.image)
-        ViewCompat.setTransitionName(articleViewHolder.image, article.urlToImage)
     }
 
     inner class NewsHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -67,7 +66,7 @@ class NewsRecyclerAdapter(
 
         init {
             itemView.setOnClickListener {
-                onItemClick?.invoke(articles[adapterPosition], image)
+                onItemClick?.invoke(articles[adapterPosition])
             }
         }
     }

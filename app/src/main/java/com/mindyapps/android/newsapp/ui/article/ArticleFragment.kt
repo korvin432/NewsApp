@@ -60,11 +60,6 @@ class ArticleFragment : Fragment() {
         return root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition()
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, ArticleViewModelFactory(repositoryImpl)).get(ArticleViewModel::class.java)
@@ -73,7 +68,6 @@ class ArticleFragment : Fragment() {
         GlideApp.with(activity!!.applicationContext)
             .load(imageUrl)
             .into(image)
-        startPostponedEnterTransition()
         article_text.text = text
     }
 
