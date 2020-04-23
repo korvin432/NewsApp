@@ -5,4 +5,5 @@ import com.mindyapps.android.newsapp.data.model.TopHeadlinesResponse
 
 interface NewsRepository {
     suspend fun getTopHeadlines(category:String, country:String): LiveData<TopHeadlinesResponse>
+    suspend fun getEverything(query:String): LiveData<TopHeadlinesResponse>
 }

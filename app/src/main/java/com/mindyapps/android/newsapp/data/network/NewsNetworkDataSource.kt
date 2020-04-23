@@ -5,6 +5,8 @@ import com.mindyapps.android.newsapp.data.model.TopHeadlinesResponse
 
 interface NewsNetworkDataSource {
     val downloadedTopHeadlines: LiveData<TopHeadlinesResponse>
+    val downloadedEverything: LiveData<TopHeadlinesResponse>
 
     suspend fun fetchTopHeadlines(category:String, country:String)
+    suspend fun fetchEverything(query:String)
 }

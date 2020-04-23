@@ -19,4 +19,13 @@ class NewsRepositoryImpl(
             return@withContext dataSource.downloadedTopHeadlines
         }
     }
+
+    override suspend fun getEverything(
+        query: String
+    ): LiveData<TopHeadlinesResponse> {
+        return withContext(Dispatchers.IO) {
+            dataSource.fetchEverything(query)
+            return@withContext dataSource.downloadedEverything
+        }
+    }
 }

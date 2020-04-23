@@ -14,12 +14,28 @@ class NewsNetworkDataSourceImpl(
     override val downloadedTopHeadlines: LiveData<TopHeadlinesResponse>
         get() = _downloadedTopHeadlines
 
+    private val _downloadedEverything = MutableLiveData<TopHeadlinesResponse>()
+    override val downloadedEverything: LiveData<TopHeadlinesResponse>
+        get() = _downloadedEverything
+
     override suspend fun fetchTopHeadlines(category:String, country:String) {
         try {
             val fetchedTopHeadlines = apiService
                 .getTopHeadlinesAsync(country,category)
                 .await()
             _downloadedTopHeadlines.postValue(fetchedTopHeadlines)
+        }
+        catch (e: Exception){
+            Log.e("Connectivity", "No internet connection", e)
+        }
+    }
+
+    override suspend fun fetchEverything(query: String) {
+        try {
+            val fetchedEverything = apiService
+                .getEverythingAsync(query)
+                .await()
+            _downloadedEverything.postValue(fetchedEverything)
         }
         catch (e: Exception){
             Log.e("Connectivity", "No internet connection", e)

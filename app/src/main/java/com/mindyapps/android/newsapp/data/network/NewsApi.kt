@@ -22,6 +22,11 @@ interface NewsApi {
         @Query("category") category: String
     ): Deferred<TopHeadlinesResponse>
 
+    @GET("everything")
+    fun getEverythingAsync(
+        @Query("q") query: String
+    ): Deferred<TopHeadlinesResponse>
+
     companion object {
         operator fun invoke(
             connectivityInterceptor: ConnectivityInterceptor

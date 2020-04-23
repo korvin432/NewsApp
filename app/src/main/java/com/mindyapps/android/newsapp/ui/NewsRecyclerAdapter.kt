@@ -43,6 +43,11 @@ class NewsRecyclerAdapter(
         setPropertiesForArticleViewHolder(holder, article)
     }
 
+    fun clearArticles(){
+        articles.clear()
+        notifyDataSetChanged()
+    }
+
     fun setArticles(newArticles: List<Article>) {
         articles.clear()
         articles.addAll(newArticles)

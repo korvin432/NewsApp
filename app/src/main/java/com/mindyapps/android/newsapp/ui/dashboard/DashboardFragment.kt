@@ -158,7 +158,6 @@ class DashboardFragment : ScopedFragment() {
             view!!.findNavController()
                 .navigate(R.id.action_navigation_dashboard_to_navigation_article, bundle)
         }
-
     }
 
     private fun bindUI() = launch(Main) {
