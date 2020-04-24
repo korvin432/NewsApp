@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
-import com.mindyapps.android.newsapp.data.model.TopHeadlinesResponse
+import com.mindyapps.android.newsapp.data.model.NewsResponse
 import com.mindyapps.android.newsapp.data.network.ConnectivityInterceptorImpl
 import com.mindyapps.android.newsapp.data.network.NewsApi
 import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSourceImpl
@@ -32,7 +31,7 @@ class SearchFragment : Fragment(), View.OnFocusChangeListener, SearchView.OnQuer
     private lateinit var dataSourceImpl: NewsNetworkDataSourceImpl
     private lateinit var api: NewsApi
     private lateinit var conn: ConnectivityInterceptorImpl
-    private lateinit var observerNewsArticle: Observer<TopHeadlinesResponse>
+    private lateinit var observerNewsArticle: Observer<NewsResponse>
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var newsRecyclerAdapter: NewsRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
@@ -73,11 +72,7 @@ class SearchFragment : Fragment(), View.OnFocusChangeListener, SearchView.OnQuer
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
         newsRecyclerAdapter.onItemClick = { article ->
-            val bundle = bundleOf(
-                "imageUrl" to article.urlToImage,
-                "title" to article.title,
-                "text" to article.content
-            )
+            val bundle = bundleOf("imageUrl" to article)
             view!!.findNavController()
                 .navigate(R.id.action_navigation_search_to_navigation_article, bundle)
         }

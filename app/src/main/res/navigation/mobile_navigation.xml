@@ -25,15 +25,8 @@
         android:label="Article"
         tools:layout="@layout/fragment_article">
         <argument
-            android:name="imageUrl"
-            app:argType="string"/>
-        <argument
-            android:name="title"
-            app:argType="string"/>
-        <argument
-            android:name="text"
-            android:defaultValue="No text"
-            app:argType="string"/>
+            android:name="article"
+            app:argType="com.mindyapps.android.newsapp.data.model.Article"/>
     </fragment>
 
     <fragment
@@ -54,5 +47,13 @@
         android:id="@+id/navigation_favourites"
         android:name="com.mindyapps.android.newsapp.ui.favourites.FavouritesFragment"
         android:label="@string/title_favourites"
-        tools:layout="@layout/fragment_favourites" />
+        tools:layout="@layout/fragment_favourites" >
+        <action
+            android:id="@+id/action_navigation_favourites_to_navigation_article"
+            app:destination="@id/navigation_article"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
 </navigation>

@@ -1,21 +1,15 @@
 package com.mindyapps.android.newsapp.ui.dashboard
 
 import android.os.Bundle
-import android.text.Layout
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -24,7 +18,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
-import com.mindyapps.android.newsapp.data.model.TopHeadlinesResponse
+import com.mindyapps.android.newsapp.data.model.NewsResponse
 import com.mindyapps.android.newsapp.data.network.ConnectivityInterceptorImpl
 import com.mindyapps.android.newsapp.data.network.NewsApi
 import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSourceImpl
@@ -32,9 +26,7 @@ import com.mindyapps.android.newsapp.data.repository.NewsRepositoryImpl
 import com.mindyapps.android.newsapp.ui.NewsRecyclerAdapter
 import com.mindyapps.android.newsapp.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import kotlinx.android.synthetic.main.news_item.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
 
@@ -52,7 +44,7 @@ class DashboardFragment : ScopedFragment() {
     private lateinit var categoryChips: ChipGroup
     private lateinit var countryChips: ChipGroup
     private lateinit var searchButton: MaterialButton
-    private lateinit var observerNewsArticle: Observer<TopHeadlinesResponse>
+    private lateinit var observerNewsArticle: Observer<NewsResponse>
 
     private val sourceList = ArrayList<Article>()
     private var root: View? = null
@@ -151,11 +143,7 @@ class DashboardFragment : ScopedFragment() {
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
         newsRecyclerAdapter.onItemClick = { article ->
-            val bundle = bundleOf(
-                "imageUrl" to article.urlToImage,
-                "title" to article.title,
-                "text" to article.content
-            )
+            val bundle = bundleOf("article" to article)
             view!!.findNavController()
                 .navigate(R.id.action_navigation_dashboard_to_navigation_article, bundle)
         }

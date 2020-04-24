@@ -1,12 +1,9 @@
 package com.mindyapps.android.newsapp.ui.dashboard
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mindyapps.android.newsapp.data.model.TopHeadlinesResponse
+import com.mindyapps.android.newsapp.data.model.NewsResponse
 import com.mindyapps.android.newsapp.data.repository.NewsRepository
-import com.mindyapps.android.newsapp.internal.lazyDeferred
 
 class DashboardViewModel(
     private val newsRepository: NewsRepository
@@ -15,7 +12,7 @@ class DashboardViewModel(
      var country: String = "us"
      var category: String = "general"
 
-    suspend fun getNewsSource(): LiveData<TopHeadlinesResponse> {
+    suspend fun getNewsSource(): LiveData<NewsResponse> {
         return newsRepository.getTopHeadlines(category, country)
     }
 

@@ -1,8 +1,7 @@
 package com.mindyapps.android.newsapp.data.network
 
-import android.util.Log
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.mindyapps.android.newsapp.data.model.TopHeadlinesResponse
+import com.mindyapps.android.newsapp.data.model.NewsResponse
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -20,12 +19,12 @@ interface NewsApi {
     fun getTopHeadlinesAsync(
         @Query("country") country: String,
         @Query("category") category: String
-    ): Deferred<TopHeadlinesResponse>
+    ): Deferred<NewsResponse>
 
     @GET("everything")
     fun getEverythingAsync(
         @Query("q") query: String
-    ): Deferred<TopHeadlinesResponse>
+    ): Deferred<NewsResponse>
 
     companion object {
         operator fun invoke(

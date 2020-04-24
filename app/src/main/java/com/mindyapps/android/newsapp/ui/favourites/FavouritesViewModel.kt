@@ -1,13 +1,22 @@
 package com.mindyapps.android.newsapp.ui.favourites
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mindyapps.android.newsapp.data.db.NewsDatabase
+import com.mindyapps.android.newsapp.data.model.Article
+import com.mindyapps.android.newsapp.data.repository.NewsRepository
 
-class FavouritesViewModel : ViewModel() {
+class FavouritesViewModel(
+    newsRepository: NewsRepository,
+    application: Application
+) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Favourites Fragment"
+    val allArticles: LiveData<List<Article>>
+
+    init {
+        val newsDao = NewsDatabase.getDatabase(application).newsDao()
+        allArticles = newsRepository.getFavouriteArticles(newsDao)
     }
-    val text: LiveData<String> = _text
 }
