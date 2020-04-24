@@ -93,13 +93,15 @@ class DashboardFragment : ScopedFragment() {
         super.onActivityCreated(savedInstanceState)
 
         searchButton.setOnClickListener {
-            loadNews()
+            newsRecyclerAdapter.clearArticles()
             progressBar.visibility = View.VISIBLE
+            loadNews()
             bindUI()
         }
 
         observerNewsArticle = Observer { newsSource ->
             if (newsSource?.articles != null && newsSource.articles.isNotEmpty()) {
+                progressBar.visibility = View.GONE
                 newsRecyclerAdapter.setArticles(newsSource.articles)
             }
         }
@@ -149,11 +151,10 @@ class DashboardFragment : ScopedFragment() {
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
         newsRecyclerAdapter.onItemClick = { article ->
-            val text = article.content ?: article.description
             val bundle = bundleOf(
                 "imageUrl" to article.urlToImage,
                 "title" to article.title,
-                "text" to text
+                "text" to article.content
             )
             view!!.findNavController()
                 .navigate(R.id.action_navigation_dashboard_to_navigation_article, bundle)
@@ -161,7 +162,6 @@ class DashboardFragment : ScopedFragment() {
     }
 
     private fun bindUI() = launch(Main) {
-        progressBar.visibility = View.GONE
         try {
             val countryChip: Chip = countryChips.findViewById(countryChips.checkedChipId)
             val categoryChip: Chip = categoryChips.findViewById(categoryChips.checkedChipId)

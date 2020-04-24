@@ -73,11 +73,10 @@ class SearchFragment : Fragment(), View.OnFocusChangeListener, SearchView.OnQuer
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
         newsRecyclerAdapter.onItemClick = { article ->
-            val text = article.content ?: article.description
             val bundle = bundleOf(
                 "imageUrl" to article.urlToImage,
                 "title" to article.title,
-                "text" to text
+                "text" to article.content
             )
             view!!.findNavController()
                 .navigate(R.id.action_navigation_search_to_navigation_article, bundle)
@@ -86,7 +85,6 @@ class SearchFragment : Fragment(), View.OnFocusChangeListener, SearchView.OnQuer
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         searchView.setOnQueryTextListener(this)
     }
 

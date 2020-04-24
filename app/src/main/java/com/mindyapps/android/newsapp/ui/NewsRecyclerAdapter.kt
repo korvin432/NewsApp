@@ -40,10 +40,13 @@ class NewsRecyclerAdapter(
 
     override fun onBindViewHolder(holder: NewsHolder, position: Int) {
         val article: Article = articles[position]
-        setPropertiesForArticleViewHolder(holder, article)
+        if (article.title != null && article.content != null
+            && article.urlToImage != null && article.description != null) {
+            setPropertiesForArticleViewHolder(holder, article)
+        }
     }
 
-    fun clearArticles(){
+    fun clearArticles() {
         articles.clear()
         notifyDataSetChanged()
     }
