@@ -27,12 +27,12 @@ class ArticleViewModel(
         newsRepository.deleteArticle(article, newsDao)
     }
 
-    fun getArticle(id: Int?): LiveData<Article> {
-        return newsRepository.getArticleById(newsDao, id)
+    fun deleteLastArticle() = viewModelScope.launch(Dispatchers.IO) {
+        newsRepository.deleteLastArticle(newsDao)
     }
 
-    fun getLastArticle(): LiveData<Article> {
-        return newsRepository.getLastArticle(newsDao)
+    fun getArticles(): LiveData<List<Article>> {
+        return newsRepository.getFavouriteArticles(newsDao)
     }
 
 }

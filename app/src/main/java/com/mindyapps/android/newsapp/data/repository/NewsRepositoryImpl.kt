@@ -36,6 +36,10 @@ class NewsRepositoryImpl(
         newsDao.delete(article)
     }
 
+    override fun deleteLastArticle(newsDao: NewsDao) {
+        newsDao.deleteLastArticle()
+    }
+
     override fun getFavouriteArticles(newsDao: NewsDao): LiveData<List<Article>> {
         return newsDao.getArticles()
     }

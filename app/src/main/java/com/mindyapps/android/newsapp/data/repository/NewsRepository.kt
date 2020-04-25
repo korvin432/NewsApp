@@ -10,6 +10,7 @@ interface NewsRepository {
     suspend fun getEverything(query: String): LiveData<NewsResponse>
     suspend fun insertArticle(article: Article?, newsDao: NewsDao)
     fun deleteArticle(article: Article?, newsDao: NewsDao)
+    fun deleteLastArticle(newsDao: NewsDao)
     fun getFavouriteArticles(newsDao: NewsDao): LiveData<List<Article>>
     fun getArticleById(newsDao: NewsDao, id: Int?): LiveData<Article>
     fun getLastArticle(newsDao: NewsDao): LiveData<Article>
