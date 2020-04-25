@@ -40,10 +40,7 @@ class NewsRecyclerAdapter(
 
     override fun onBindViewHolder(holder: NewsHolder, position: Int) {
         val article: Article = articles[position]
-        if (article.title != null && article.content != null
-            && article.urlToImage != null && article.description != null) {
-            setPropertiesForArticleViewHolder(holder, article)
-        }
+        setPropertiesForArticleViewHolder(holder, article)
     }
 
     fun clearArticles() {
@@ -56,6 +53,7 @@ class NewsRecyclerAdapter(
         articles.addAll(newArticles)
         notifyDataSetChanged()
     }
+
 
     private fun setPropertiesForArticleViewHolder(articleViewHolder: NewsHolder, article: Article) {
         articleViewHolder.author.text = article.title

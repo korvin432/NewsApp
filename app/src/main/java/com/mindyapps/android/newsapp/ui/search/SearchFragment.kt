@@ -72,7 +72,7 @@ class SearchFragment : Fragment(), View.OnFocusChangeListener, SearchView.OnQuer
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
         newsRecyclerAdapter.onItemClick = { article ->
-            val bundle = bundleOf("imageUrl" to article)
+            val bundle = bundleOf("article" to article)
             view!!.findNavController()
                 .navigate(R.id.action_navigation_search_to_navigation_article, bundle)
         }

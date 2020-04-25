@@ -20,17 +20,19 @@ class ArticleViewModel(
     private val newsDao = NewsDatabase.getDatabase(application).newsDao()
 
     fun insert(article: Article?) = viewModelScope.launch(Dispatchers.IO) {
-        Log.d("qwwe", "insert")
         newsRepository.insertArticle(article, newsDao)
     }
 
     fun delete(article: Article?) = viewModelScope.launch(Dispatchers.IO) {
-        Log.d("qwwe", "deleting")
         newsRepository.deleteArticle(article, newsDao)
     }
 
     fun getArticle(id: Int?): LiveData<Article> {
         return newsRepository.getArticleById(newsDao, id)
+    }
+
+    fun getLastArticle(): LiveData<Article> {
+        return newsRepository.getLastArticle(newsDao)
     }
 
 }

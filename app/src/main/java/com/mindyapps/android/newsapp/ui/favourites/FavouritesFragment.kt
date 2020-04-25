@@ -35,6 +35,7 @@ class FavouritesFragment : Fragment() {
     private lateinit var observerNewsArticle: Observer<List<Article>>
 
     private val sourceList = ArrayList<Article>()
+    private var root: View? = null
     private lateinit var favouritesViewModel: FavouritesViewModel
 
     override fun onCreateView(
@@ -42,12 +43,13 @@ class FavouritesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_favourites, container, false)
+        if (root == null) {
+        root = inflater.inflate(R.layout.fragment_favourites, container, false)
         conn = ConnectivityInterceptorImpl(activity!!.applicationContext)
         api = NewsApi(conn)
         dataSourceImpl = NewsNetworkDataSourceImpl(api)
         repositoryImpl = NewsRepositoryImpl(dataSourceImpl)
-        recyclerView = root.findViewById(R.id.favourites_recycler)
+        recyclerView = root!!.findViewById(R.id.favourites_recycler)
 
         favouritesViewModel =
             ViewModelProvider(
@@ -55,7 +57,7 @@ class FavouritesFragment : Fragment() {
                 FavouritesViewModelFactory(repositoryImpl, activity!!.application)
             ).get(FavouritesViewModel::class.java)
         bindRecyclerView()
-
+        }
         return root
     }
 

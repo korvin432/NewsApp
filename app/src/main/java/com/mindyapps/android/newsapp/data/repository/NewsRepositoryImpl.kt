@@ -43,4 +43,8 @@ class NewsRepositoryImpl(
     override fun getArticleById(newsDao: NewsDao, id: Int?): LiveData<Article> {
         return newsDao.getArticleById(id)
     }
+
+    override fun getLastArticle(newsDao: NewsDao): LiveData<Article> {
+        return newsDao.getLastArticle()
+    }
 }

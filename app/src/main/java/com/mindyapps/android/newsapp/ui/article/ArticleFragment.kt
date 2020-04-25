@@ -62,12 +62,16 @@ class ArticleFragment : Fragment() {
             ArticleViewModelFactory(repositoryImpl, activity!!.application)
         ).get(ArticleViewModel::class.java)
 
+        try {
+            GlideApp.with(activity!!.applicationContext)
+                .load(article!!.urlToImage)
+                .into(image)
+        } catch (ex: Exception){
 
-        GlideApp.with(activity!!.applicationContext)
-            .load(article!!.urlToImage)
-            .into(image)
+        }
+
         button.setOnClickListener {
-            if (saving){
+            if (saving) {
                 viewModel.insert(article)
             } else {
                 viewModel.delete(article)

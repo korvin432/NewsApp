@@ -12,9 +12,12 @@ interface NewsDao {
     @Delete
     fun delete(article: Article?)
 
-    @Query("SELECT * FROM articles")
+    @Query("SELECT * FROM articles ORDER BY id DESC")
     fun getArticles(): LiveData<List<Article>>
 
     @Query("SELECT * FROM articles WHERE id = :id")
     fun getArticleById(id: Int?):LiveData<Article>
+
+    @Query("SELECT * FROM articles ORDER BY id DESC LIMIT 1")
+    fun getLastArticle():LiveData<Article>
 }

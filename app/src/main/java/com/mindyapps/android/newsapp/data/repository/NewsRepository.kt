@@ -12,4 +12,5 @@ interface NewsRepository {
     fun deleteArticle(article: Article?, newsDao: NewsDao)
     fun getFavouriteArticles(newsDao: NewsDao): LiveData<List<Article>>
     fun getArticleById(newsDao: NewsDao, id: Int?): LiveData<Article>
+    fun getLastArticle(newsDao: NewsDao): LiveData<Article>
 }
