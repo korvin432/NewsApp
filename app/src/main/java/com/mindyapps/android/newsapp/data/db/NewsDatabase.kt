@@ -16,6 +16,11 @@ abstract class NewsDatabase: RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: NewsDatabase? = null
+        private val LOCK = Any()
+
+        operator fun invoke(context: Context) = INSTANCE ?: synchronized(LOCK) {
+            INSTANCE ?: getDatabase(context).also { INSTANCE = it }
+        }
 
         fun getDatabase(context: Context): NewsDatabase {
             val tempInstance = INSTANCE

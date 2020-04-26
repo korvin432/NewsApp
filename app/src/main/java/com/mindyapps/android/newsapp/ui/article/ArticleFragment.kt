@@ -23,23 +23,23 @@ import com.mindyapps.android.newsapp.data.network.NewsApi
 import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSourceImpl
 import com.mindyapps.android.newsapp.data.repository.NewsRepositoryImpl
 import com.mindyapps.android.newsapp.internal.GlideApp
+import com.mindyapps.android.newsapp.ui.dashboard.DashboardViewModelFactory
 import kotlinx.android.synthetic.main.fragment_article.*
 import kotlinx.coroutines.launch
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
 
-class ArticleFragment : Fragment() {
+class ArticleFragment : Fragment(), KodeinAware {
 
-    private lateinit var repositoryImpl: NewsRepositoryImpl
-    private lateinit var dataSourceImpl: NewsNetworkDataSourceImpl
-    private lateinit var api: NewsApi
-    private lateinit var conn: ConnectivityInterceptorImpl
+    override val kodein by closestKodein()
+    private val viewModelFactory: ArticleViewModelFactory by instance()
     private lateinit var viewModel: ArticleViewModel
     private lateinit var image: ImageView
     private lateinit var button: FloatingActionButton
     private lateinit var observerNewsArticle: Observer<List<Article>>
-
     private var article: Article? = null
-    private var saving = false
     private var isFavourite = false
 
 
@@ -48,19 +48,10 @@ class ArticleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_article, container, false)
-
-        conn = ConnectivityInterceptorImpl(activity!!.applicationContext)
-        api = NewsApi(conn)
-        dataSourceImpl = NewsNetworkDataSourceImpl(api)
-        repositoryImpl = NewsRepositoryImpl(dataSourceImpl)
         image = root.findViewById(R.id.header)
         button = root.findViewById(R.id.floating_button)
         article = arguments!!.getParcelable("article")
-        viewModel = ViewModelProvider(
-            this,
-            ArticleViewModelFactory(repositoryImpl, activity!!.application)
-        ).get(ArticleViewModel::class.java)
-
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleViewModel::class.java)
 
         try {
             GlideApp.with(activity!!.applicationContext)

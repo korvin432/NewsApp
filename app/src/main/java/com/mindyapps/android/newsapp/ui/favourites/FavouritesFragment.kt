@@ -22,13 +22,17 @@ import com.mindyapps.android.newsapp.data.network.NewsApi
 import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSourceImpl
 import com.mindyapps.android.newsapp.data.repository.NewsRepositoryImpl
 import com.mindyapps.android.newsapp.ui.NewsRecyclerAdapter
+import com.mindyapps.android.newsapp.ui.dashboard.DashboardViewModelFactory
 import kotlinx.coroutines.launch
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
-class FavouritesFragment : Fragment() {
-    private lateinit var repositoryImpl: NewsRepositoryImpl
-    private lateinit var dataSourceImpl: NewsNetworkDataSourceImpl
-    private lateinit var api: NewsApi
-    private lateinit var conn: ConnectivityInterceptorImpl
+class FavouritesFragment : Fragment(), KodeinAware {
+
+    override val kodein by closestKodein()
+    private val viewModelFactory: FavouritesViewModelFactory by instance()
+    private lateinit var favouritesViewModel: FavouritesViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var newsRecyclerAdapter: NewsRecyclerAdapter
@@ -36,7 +40,6 @@ class FavouritesFragment : Fragment() {
 
     private val sourceList = ArrayList<Article>()
     private var root: View? = null
-    private lateinit var favouritesViewModel: FavouritesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,19 +47,12 @@ class FavouritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         if (root == null) {
-        root = inflater.inflate(R.layout.fragment_favourites, container, false)
-        conn = ConnectivityInterceptorImpl(activity!!.applicationContext)
-        api = NewsApi(conn)
-        dataSourceImpl = NewsNetworkDataSourceImpl(api)
-        repositoryImpl = NewsRepositoryImpl(dataSourceImpl)
-        recyclerView = root!!.findViewById(R.id.favourites_recycler)
+            root = inflater.inflate(R.layout.fragment_favourites, container, false)
+            recyclerView = root!!.findViewById(R.id.favourites_recycler)
 
-        favouritesViewModel =
-            ViewModelProvider(
-                this,
-                FavouritesViewModelFactory(repositoryImpl, activity!!.application)
-            ).get(FavouritesViewModel::class.java)
-        bindRecyclerView()
+            favouritesViewModel = ViewModelProvider(this, viewModelFactory)
+                .get(FavouritesViewModel::class.java)
+            bindRecyclerView()
         }
         return root
     }

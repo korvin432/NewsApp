@@ -33,16 +33,18 @@ import com.mindyapps.android.newsapp.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
 
-class DashboardFragment : ScopedFragment() {
+class DashboardFragment : ScopedFragment(), KodeinAware {
 
+    override val kodein by closestKodein()
+    private val viewModelFactory: DashboardViewModelFactory by instance()
     private lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var recyclerView: RecyclerView
-    private lateinit var repositoryImpl: NewsRepositoryImpl
-    private lateinit var dataSourceImpl: NewsNetworkDataSourceImpl
-    private lateinit var api: NewsApi
-    private lateinit var conn: ConnectivityInterceptorImpl
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var newsRecyclerAdapter: NewsRecyclerAdapter
     private lateinit var progressBar: ProgressBar
@@ -50,7 +52,6 @@ class DashboardFragment : ScopedFragment() {
     private lateinit var countryChips: ChipGroup
     private lateinit var searchButton: MaterialButton
     private lateinit var observerNewsArticle: Observer<NewsResponse>
-
     private val sourceList = ArrayList<Article>()
     private var root: View? = null
 
@@ -59,20 +60,15 @@ class DashboardFragment : ScopedFragment() {
     ): View? {
         if (root == null) {
             root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-            conn = ConnectivityInterceptorImpl(activity!!.applicationContext)
-            api = NewsApi(conn)
-            dataSourceImpl = NewsNetworkDataSourceImpl(api)
-            repositoryImpl = NewsRepositoryImpl(dataSourceImpl)
             recyclerView = root!!.findViewById(R.id.dashboard_recycler)
             progressBar = root!!.findViewById(R.id.progress_circular)
             categoryChips = root!!.findViewById(R.id.category_chips)
             countryChips = root!!.findViewById(R.id.country_chips)
             searchButton = root!!.findViewById(R.id.search_button)
 
-            dashboardViewModel =
-                ViewModelProvider(this, DashboardViewModelFactory(repositoryImpl)).get(
-                    DashboardViewModel::class.java
-                )
+            dashboardViewModel = ViewModelProvider(this, viewModelFactory).get(
+                DashboardViewModel::class.java
+            )
             bindChipGroup(categoryChips, countryChips)
             bindRecyclerView()
         }
@@ -166,4 +162,5 @@ class DashboardFragment : ScopedFragment() {
             ex.printStackTrace()
         }
     }
+
 }

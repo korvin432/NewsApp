@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import com.mindyapps.android.newsapp.data.db.NewsDao
 import com.mindyapps.android.newsapp.data.model.Article
 import com.mindyapps.android.newsapp.data.model.NewsResponse
+import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSource
 import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSourceImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class NewsRepositoryImpl(
-    private val dataSource: NewsNetworkDataSourceImpl
+    private val dataSource: NewsNetworkDataSource
 ) : NewsRepository {
 
     override suspend fun getTopHeadlines(category:String, country:String): LiveData<NewsResponse> {

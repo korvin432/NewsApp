@@ -20,23 +20,25 @@ import com.mindyapps.android.newsapp.data.network.NewsApi
 import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSourceImpl
 import com.mindyapps.android.newsapp.data.repository.NewsRepositoryImpl
 import com.mindyapps.android.newsapp.ui.NewsRecyclerAdapter
+import com.mindyapps.android.newsapp.ui.favourites.FavouritesViewModelFactory
 import kotlinx.coroutines.launch
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.instance
 
 
-class SearchFragment : Fragment(), View.OnFocusChangeListener, SearchView.OnQueryTextListener {
+class SearchFragment : Fragment(), View.OnFocusChangeListener, SearchView.OnQueryTextListener,
+    KodeinAware {
 
+    override val kodein by closestKodein()
+    private val viewModelFactory: SearchViewModelFactory by instance()
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var searchView: SearchView
-    private lateinit var repositoryImpl: NewsRepositoryImpl
-    private lateinit var dataSourceImpl: NewsNetworkDataSourceImpl
-    private lateinit var api: NewsApi
-    private lateinit var conn: ConnectivityInterceptorImpl
     private lateinit var observerNewsArticle: Observer<NewsResponse>
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var newsRecyclerAdapter: NewsRecyclerAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
-
     private val sourceList = ArrayList<Article>()
     private var root: View? = null
 
@@ -47,19 +49,12 @@ class SearchFragment : Fragment(), View.OnFocusChangeListener, SearchView.OnQuer
     ): View? {
         if (root == null) {
             root = inflater.inflate(R.layout.fragment_search, container, false)
-            conn = ConnectivityInterceptorImpl(activity!!.applicationContext)
-            api = NewsApi(conn)
-            dataSourceImpl = NewsNetworkDataSourceImpl(api)
-            repositoryImpl = NewsRepositoryImpl(dataSourceImpl)
             searchView = root!!.findViewById(R.id.search_view)
             recyclerView = root!!.findViewById(R.id.search_recycler)
             progressBar = root!!.findViewById(R.id.search_progress)
 
-            searchViewModel = ViewModelProvider(
-                this, SearchViewModelFactory(repositoryImpl)
-            ).get(
-                SearchViewModel::class.java
-            )
+            searchViewModel =
+                ViewModelProvider(this, viewModelFactory).get(SearchViewModel::class.java)
             bindRecyclerView()
         }
         return root
