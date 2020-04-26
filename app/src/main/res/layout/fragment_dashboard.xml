@@ -74,8 +74,7 @@
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
-                app:title="Dashboard" />
+                app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -96,7 +95,7 @@
                 android:id="@+id/progress_circular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/dashboard_recycler"

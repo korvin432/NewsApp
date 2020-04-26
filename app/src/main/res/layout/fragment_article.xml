@@ -37,16 +37,6 @@
                 android:layout_gravity="bottom"
                 android:background="@drawable/scrim" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                app:contentInsetStart="0dp"
-                app:contentInsetStartWithNavigation="0dp"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
-                app:title="Dashboard" />
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -64,17 +54,35 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/article_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:autoLink="web"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/article_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <Button
-                android:id="@+id/save_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Save"/>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:src="@drawable/icon_star"
+        android:tint="@color/colorAccent"
+        app:layout_anchor="@id/appBarLayout"
+        app:layout_anchorGravity="bottom|end|right"
+        app:maxImageSize="28dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

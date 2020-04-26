@@ -1,11 +1,16 @@
 package com.mindyapps.android.newsapp.ui.dashboard
 
+import android.R.attr.resource
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
+import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -26,8 +31,8 @@ import com.mindyapps.android.newsapp.data.repository.NewsRepositoryImpl
 import com.mindyapps.android.newsapp.ui.NewsRecyclerAdapter
 import com.mindyapps.android.newsapp.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
 
 
 class DashboardFragment : ScopedFragment() {
@@ -104,6 +109,7 @@ class DashboardFragment : ScopedFragment() {
     private fun setToolbar() {
         var isShow = true
         var scrollRange = -1
+        toolbar.setPadding(25)
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
             if (scrollRange == -1) {
                 scrollRange = barLayout?.totalScrollRange!!

@@ -1,17 +1,21 @@
 package com.mindyapps.android.newsapp.ui.article
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
-import androidx.core.app.ActivityCompat.invalidateOptionsMenu
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
 import com.mindyapps.android.newsapp.data.network.ConnectivityInterceptorImpl
@@ -31,7 +35,7 @@ class ArticleFragment : Fragment() {
     private lateinit var conn: ConnectivityInterceptorImpl
     private lateinit var viewModel: ArticleViewModel
     private lateinit var image: ImageView
-    private lateinit var button: Button
+    private lateinit var button: FloatingActionButton
     private lateinit var observerNewsArticle: Observer<List<Article>>
 
     private var article: Article? = null
@@ -50,37 +54,35 @@ class ArticleFragment : Fragment() {
         dataSourceImpl = NewsNetworkDataSourceImpl(api)
         repositoryImpl = NewsRepositoryImpl(dataSourceImpl)
         image = root.findViewById(R.id.header)
-        button = root.findViewById(R.id.save_button)
-
+        button = root.findViewById(R.id.floating_button)
         article = arguments!!.getParcelable("article")
-
         viewModel = ViewModelProvider(
             this,
             ArticleViewModelFactory(repositoryImpl, activity!!.application)
         ).get(ArticleViewModel::class.java)
 
+
         try {
             GlideApp.with(activity!!.applicationContext)
                 .load(article!!.urlToImage)
                 .into(image)
-        } catch (ex: Exception){
+        } catch (ex: Exception) {
 
         }
 
         button.setOnClickListener {
-            if (!isFavourite) {
+            isFavourite = if (!isFavourite) {
                 viewModel.insert(article)
-                isFavourite = true
-                button.text = "Delete"
+                true
             } else {
                 if (article!!.id != null) {
                     viewModel.delete(article)
                 } else {
                     viewModel.deleteLastArticle()
                 }
-                isFavourite = false
-                button.text = "Save"
+                false
             }
+            setButton(isFavourite)
         }
         return root
     }
@@ -91,16 +93,44 @@ class ArticleFragment : Fragment() {
         isFavourite = article!!.id != null
         observerNewsArticle = Observer { newsSource ->
             if (newsSource != null) {
-                if (isFavourite){
-                    button.text = "Delete"
-                } else {
-                    button.text = "Save"
-                }
+                setButton(isFavourite)
             }
         }
         article_text.text = article!!.content
+        setTitle()
         setToolbar()
         loadNews()
+    }
+
+    private fun setTitle() {
+        val content = SpannableString(article!!.title)
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        article_title.text = content
+        article_title.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(article!!.url)))
+        }
+    }
+
+    private fun setButton(isFavourite: Boolean) {
+        if (isFavourite) {
+            button.setImageResource(R.drawable.icon_star_filled)
+            button.drawable.mutate()
+                .setTint(
+                    ContextCompat.getColor(
+                        activity!!.applicationContext,
+                        R.color.colorPrimary
+                    )
+                )
+        } else {
+            button.setImageResource(R.drawable.icon_star)
+            button.drawable.mutate()
+                .setTint(
+                    ContextCompat.getColor(
+                        activity!!.applicationContext,
+                        R.color.colorPrimary
+                    )
+                )
+        }
     }
 
     private fun loadNews() {
@@ -117,10 +147,8 @@ class ArticleFragment : Fragment() {
                 scrollRange = barLayout?.totalScrollRange!!
             }
             if (scrollRange + verticalOffset == 0) {
-                collapsingToolbar.title = article!!.title
                 isShow = true
             } else if (isShow) {
-                collapsingToolbar.title = " "
                 isShow = false
             }
         })
