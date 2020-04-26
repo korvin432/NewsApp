@@ -1,14 +1,11 @@
 package com.mindyapps.android.newsapp.ui.dashboard
 
-import android.R.attr.resource
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
@@ -24,16 +21,10 @@ import com.google.android.material.chip.ChipGroup
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
 import com.mindyapps.android.newsapp.data.model.NewsResponse
-import com.mindyapps.android.newsapp.data.network.ConnectivityInterceptorImpl
-import com.mindyapps.android.newsapp.data.network.NewsApi
-import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSourceImpl
-import com.mindyapps.android.newsapp.data.repository.NewsRepositoryImpl
 import com.mindyapps.android.newsapp.ui.NewsRecyclerAdapter
 import com.mindyapps.android.newsapp.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
@@ -76,20 +67,11 @@ class DashboardFragment : ScopedFragment(), KodeinAware {
         return root
     }
 
-    private fun loadNews() {
-        lifecycleScope.launch {
-            dashboardViewModel.getNewsSource().observe(viewLifecycleOwner, observerNewsArticle)
-        }
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         searchButton.setOnClickListener {
-            newsRecyclerAdapter.clearArticles()
-            progressBar.visibility = View.VISIBLE
             loadNews()
-            bindUI()
         }
 
         observerNewsArticle = Observer { newsSource ->
@@ -151,15 +133,24 @@ class DashboardFragment : ScopedFragment(), KodeinAware {
         }
     }
 
-    private fun bindUI() = launch(Main) {
-        try {
-            val countryChip: Chip = countryChips.findViewById(countryChips.checkedChipId)
-            val categoryChip: Chip = categoryChips.findViewById(categoryChips.checkedChipId)
-            dashboardViewModel.country = countryChip.text.toString()
-            dashboardViewModel.category = categoryChip.text.toString()
-            dashboardViewModel.getNewsSource().observe(viewLifecycleOwner, observerNewsArticle)
-        } catch (ex: Exception) {
-            ex.printStackTrace()
+    private fun loadNews() {
+        lifecycleScope.launch {
+            val countryChip: Chip? = countryChips.findViewById(countryChips.checkedChipId)
+            val categoryChip: Chip? = categoryChips.findViewById(categoryChips.checkedChipId)
+            if (categoryChip != null && countryChip != null) {
+                newsRecyclerAdapter.clearArticles()
+                progressBar.visibility = View.VISIBLE
+                dashboardViewModel.getNewsSource(
+                    categoryChip.text.toString(),
+                    countryChip.text.toString()
+                ).observe(viewLifecycleOwner, observerNewsArticle)
+            } else {
+                Toast.makeText(
+                    activity!!.applicationContext,
+                    "Select parameters",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

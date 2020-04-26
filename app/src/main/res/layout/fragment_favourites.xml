@@ -4,7 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.favourites.FavouritesFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/favourites_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:titleTextColor="@color/colorWhite"
+        app:title="@string/title_favourites"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favourites_recycler"

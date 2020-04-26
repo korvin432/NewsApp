@@ -9,10 +9,7 @@ class DashboardViewModel(
     private val newsRepository: NewsRepository
 ) : ViewModel() {
 
-     var country: String = "us"
-     var category: String = "general"
-
-    suspend fun getNewsSource(): LiveData<NewsResponse> {
+    suspend fun getNewsSource(category: String, country: String): LiveData<NewsResponse> {
         return newsRepository.getTopHeadlines(category, country)
     }
 

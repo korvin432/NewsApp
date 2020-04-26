@@ -1,7 +1,9 @@
 package com.mindyapps.android.newsapp.ui.search
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -15,12 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
 import com.mindyapps.android.newsapp.data.model.NewsResponse
-import com.mindyapps.android.newsapp.data.network.ConnectivityInterceptorImpl
-import com.mindyapps.android.newsapp.data.network.NewsApi
-import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSourceImpl
-import com.mindyapps.android.newsapp.data.repository.NewsRepositoryImpl
 import com.mindyapps.android.newsapp.ui.NewsRecyclerAdapter
-import com.mindyapps.android.newsapp.ui.favourites.FavouritesViewModelFactory
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
