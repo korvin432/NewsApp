@@ -5,7 +5,6 @@ import com.mindyapps.android.newsapp.data.db.NewsDao
 import com.mindyapps.android.newsapp.data.model.Article
 import com.mindyapps.android.newsapp.data.model.NewsResponse
 import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSource
-import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSourceImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

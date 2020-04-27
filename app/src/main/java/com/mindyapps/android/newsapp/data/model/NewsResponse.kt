@@ -1,8 +1,6 @@
 package com.mindyapps.android.newsapp.data.model
 
 
-import com.google.gson.annotations.SerializedName
-
 data class NewsResponse(
     val articles: List<Article>,
     val status: String,

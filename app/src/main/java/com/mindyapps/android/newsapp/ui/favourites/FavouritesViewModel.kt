@@ -2,7 +2,6 @@ package com.mindyapps.android.newsapp.ui.favourites
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mindyapps.android.newsapp.data.db.NewsDatabase
 import com.mindyapps.android.newsapp.data.model.Article

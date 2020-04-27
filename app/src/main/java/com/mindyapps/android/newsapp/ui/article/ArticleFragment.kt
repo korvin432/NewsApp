@@ -18,12 +18,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
-import com.mindyapps.android.newsapp.data.network.ConnectivityInterceptorImpl
-import com.mindyapps.android.newsapp.data.network.NewsApi
-import com.mindyapps.android.newsapp.data.network.NewsNetworkDataSourceImpl
-import com.mindyapps.android.newsapp.data.repository.NewsRepositoryImpl
 import com.mindyapps.android.newsapp.internal.GlideApp
-import com.mindyapps.android.newsapp.ui.dashboard.DashboardViewModelFactory
 import kotlinx.android.synthetic.main.fragment_article.*
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
