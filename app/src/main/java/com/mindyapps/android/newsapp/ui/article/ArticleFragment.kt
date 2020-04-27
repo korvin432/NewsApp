@@ -45,11 +45,11 @@ class ArticleFragment : Fragment(), KodeinAware {
         val root = inflater.inflate(R.layout.fragment_article, container, false)
         image = root.findViewById(R.id.header)
         button = root.findViewById(R.id.floating_button)
-        article = arguments!!.getParcelable("article")
+        article = requireArguments().getParcelable("article")
         viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleViewModel::class.java)
 
         try {
-            GlideApp.with(activity!!.applicationContext)
+            GlideApp.with(requireContext())
                 .load(article!!.urlToImage)
                 .into(image)
         } catch (ex: Exception) {
@@ -103,7 +103,7 @@ class ArticleFragment : Fragment(), KodeinAware {
             button.drawable.mutate()
                 .setTint(
                     ContextCompat.getColor(
-                        activity!!.applicationContext,
+                        requireContext(),
                         R.color.colorPrimary
                     )
                 )
@@ -112,7 +112,7 @@ class ArticleFragment : Fragment(), KodeinAware {
             button.drawable.mutate()
                 .setTint(
                     ContextCompat.getColor(
-                        activity!!.applicationContext,
+                        requireContext(),
                         R.color.colorPrimary
                     )
                 )

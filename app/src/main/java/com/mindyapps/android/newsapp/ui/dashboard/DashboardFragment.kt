@@ -121,14 +121,14 @@ class DashboardFragment : ScopedFragment(), KodeinAware {
     }
 
     private fun bindRecyclerView() {
-        linearLayoutManager = LinearLayoutManager(activity!!.applicationContext)
+        linearLayoutManager = LinearLayoutManager(requireContext())
         newsRecyclerAdapter =
-            NewsRecyclerAdapter(sourceList.toMutableList(), activity!!.applicationContext)
+            NewsRecyclerAdapter(sourceList.toMutableList(), requireContext())
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
         newsRecyclerAdapter.onItemClick = { article ->
             val bundle = bundleOf("article" to article)
-            view!!.findNavController()
+            requireView().findNavController()
                 .navigate(R.id.action_navigation_dashboard_to_navigation_article, bundle)
         }
     }
@@ -146,7 +146,7 @@ class DashboardFragment : ScopedFragment(), KodeinAware {
                 ).observe(viewLifecycleOwner, observerNewsArticle)
             } else {
                 Toast.makeText(
-                    activity!!.applicationContext,
+                    requireContext(),
                     "Select parameters",
                     Toast.LENGTH_SHORT
                 ).show()
