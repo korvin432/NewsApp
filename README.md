@@ -7,6 +7,12 @@ The app uses ViewModel to abstract the data from UI and Repository as single sou
 
 | Dashboard  | Search |  Favourites |
 | ------------- | ------------- | ------------- |
-| ![alt text](https://github.com/korvin432/NewsApp/blob/master/media/Dashboard.png)  | ![alt text](https://github.com/korvin432/NewsApp/blob/master/media/Search.png)  | ![alt text](https://github.com/korvin432/NewsApp/blob/master/media/Favourites.png) |
+| ![Dashboard](https://github.com/korvin432/NewsApp/blob/master/media/Dashboard.png)  | ![Search](https://github.com/korvin432/NewsApp/blob/master/media/Search.png)  | ![Favourites](https://github.com/korvin432/NewsApp/blob/master/media/Favourites.png) |
 | Article |
 ![alt text](https://github.com/korvin432/NewsApp/blob/master/media/Article.png)  | 
+
+
+# Gifs
+| Dashboard  | Search |  Favourites |
+| ------------- | ------------- | ------------- |
+| ![Dashboard](https://github.com/korvin432/NewsApp/blob/master/media/dashboard.gif)  | ![Search](https://github.com/korvin432/NewsApp/blob/master/media/search.gif)  | ![Favourites](https://github.com/korvin432/NewsApp/blob/master/media/favourites.gif) |
