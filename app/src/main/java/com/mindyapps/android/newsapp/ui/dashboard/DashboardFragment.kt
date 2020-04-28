@@ -21,6 +21,7 @@ import com.google.android.material.chip.ChipGroup
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
 import com.mindyapps.android.newsapp.data.model.NewsResponse
+import com.mindyapps.android.newsapp.internal.Constants.Companion.KEY_ARTICLE
 import com.mindyapps.android.newsapp.ui.NewsRecyclerAdapter
 import com.mindyapps.android.newsapp.ui.base.ScopedFragment
 import kotlinx.android.synthetic.main.fragment_dashboard.*
@@ -36,7 +37,6 @@ class DashboardFragment : ScopedFragment(), KodeinAware {
     private val viewModelFactory: DashboardViewModelFactory by instance()
     private lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var recyclerView: RecyclerView
-    private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var newsRecyclerAdapter: NewsRecyclerAdapter
     private lateinit var progressBar: ProgressBar
     private lateinit var categoryChips: ChipGroup
@@ -69,18 +69,15 @@ class DashboardFragment : ScopedFragment(), KodeinAware {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         searchButton.setOnClickListener {
             loadNews()
         }
-
         observerNewsArticle = Observer { newsSource ->
             if (newsSource?.articles != null && newsSource.articles.isNotEmpty()) {
                 progressBar.visibility = View.GONE
                 newsRecyclerAdapter.setArticles(newsSource.articles)
             }
         }
-
         setToolbar()
     }
 
@@ -93,7 +90,7 @@ class DashboardFragment : ScopedFragment(), KodeinAware {
                 scrollRange = barLayout?.totalScrollRange!!
             }
             if (scrollRange + verticalOffset == 0) {
-                collapsingToolbar.title = "Dashboard"
+                collapsingToolbar.title = resources.getText(R.string.title_dashboard)
                 isShow = true
             } else if (isShow) {
                 collapsingToolbar.title = " "
@@ -121,13 +118,13 @@ class DashboardFragment : ScopedFragment(), KodeinAware {
     }
 
     private fun bindRecyclerView() {
-        linearLayoutManager = LinearLayoutManager(requireContext())
+        val linearLayoutManager = LinearLayoutManager(requireContext())
         newsRecyclerAdapter =
             NewsRecyclerAdapter(sourceList.toMutableList(), requireContext())
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
         newsRecyclerAdapter.onItemClick = { article ->
-            val bundle = bundleOf("article" to article)
+            val bundle = bundleOf(KEY_ARTICLE to article)
             requireView().findNavController()
                 .navigate(R.id.action_navigation_dashboard_to_navigation_article, bundle)
         }
@@ -147,7 +144,7 @@ class DashboardFragment : ScopedFragment(), KodeinAware {
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "Select parameters",
+                    getString(R.string.select_param),
                     Toast.LENGTH_SHORT
                 ).show()
             }

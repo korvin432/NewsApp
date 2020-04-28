@@ -18,6 +18,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
+import com.mindyapps.android.newsapp.internal.Constants.Companion.KEY_ARTICLE
 import com.mindyapps.android.newsapp.internal.GlideApp
 import kotlinx.android.synthetic.main.fragment_article.*
 import kotlinx.coroutines.launch
@@ -45,7 +46,7 @@ class ArticleFragment : Fragment(), KodeinAware {
         val root = inflater.inflate(R.layout.fragment_article, container, false)
         image = root.findViewById(R.id.header)
         button = root.findViewById(R.id.floating_button)
-        article = requireArguments().getParcelable("article")
+        article = requireArguments().getParcelable(KEY_ARTICLE)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleViewModel::class.java)
 
         try {

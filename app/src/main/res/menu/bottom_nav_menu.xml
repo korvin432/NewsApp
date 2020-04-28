@@ -8,12 +8,12 @@
 
     <item
         android:id="@+id/search"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_search"
         android:title="@string/title_search" />
 
     <item
         android:id="@+id/favourites"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/icon_star_filled"
         android:title="@string/title_favourites" />
 
 </menu>

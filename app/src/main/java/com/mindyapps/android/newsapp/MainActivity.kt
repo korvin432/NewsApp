@@ -8,9 +8,6 @@ import androidx.navigation.NavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mindyapps.android.newsapp.internal.setupWithNavController
 
-/**
- * An activity that inflates a layout that has a [BottomNavigationView].
- */
 class MainActivity : AppCompatActivity() {
 
     private var currentNavController: LiveData<NavController>? = null

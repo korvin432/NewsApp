@@ -3,6 +3,7 @@
     <string name="title_search">Search</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_favourites">Favourites</string>
+    <string name="select_param">Select parameters</string>
 
     <string-array name="categories">
         <item>business</item>

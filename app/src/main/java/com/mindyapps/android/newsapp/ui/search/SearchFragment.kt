@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
 import com.mindyapps.android.newsapp.data.model.NewsResponse
+import com.mindyapps.android.newsapp.internal.Constants
 import com.mindyapps.android.newsapp.ui.NewsRecyclerAdapter
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
@@ -63,7 +64,7 @@ class SearchFragment : Fragment(), View.OnFocusChangeListener, SearchView.OnQuer
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
         newsRecyclerAdapter.onItemClick = { article ->
-            val bundle = bundleOf("article" to article)
+            val bundle = bundleOf(Constants.KEY_ARTICLE to article)
             requireView().findNavController()
                 .navigate(R.id.action_navigation_search_to_navigation_article, bundle)
         }
