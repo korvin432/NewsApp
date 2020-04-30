@@ -8,3 +8,13 @@ The app uses ViewModel to abstract the data from UI and Repository as single sou
 | Dashboard  | Search |  Favourites |
 | ------------- | ------------- | ------------- |
 | ![Dashboard](https://github.com/korvin432/NewsApp/blob/master/media/dashboard.gif)  | ![Search](https://github.com/korvin432/NewsApp/blob/master/media/search.gif)  | ![Favourites](https://github.com/korvin432/NewsApp/blob/master/media/favourites.gif) |
+
+# Components Used
+                
++ LiveData
++ ViewModel 
++ Room Persistence Library
++ Kodein
++ Coroutines
++ Retrofit2
++ Glide
