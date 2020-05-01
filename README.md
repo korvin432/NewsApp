@@ -18,3 +18,10 @@ The app uses ViewModel to abstract the data from UI and Repository as single sou
 + Coroutines
 + Retrofit2
 + Glide
+
+# Goals
+                
++ Data Binding
++ Process death
++ SearchView suggestions
+
