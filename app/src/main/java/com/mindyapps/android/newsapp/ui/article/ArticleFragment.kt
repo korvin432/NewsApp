@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
+import com.mindyapps.android.newsapp.databinding.FragmentArticleBinding
 import com.mindyapps.android.newsapp.internal.Constants.Companion.KEY_ARTICLE
 import com.mindyapps.android.newsapp.internal.GlideApp
 import kotlinx.android.synthetic.main.fragment_article.*
@@ -32,32 +34,31 @@ class ArticleFragment : Fragment(), KodeinAware {
     override val kodein by closestKodein()
     private val viewModelFactory: ArticleViewModelFactory by instance()
     private lateinit var viewModel: ArticleViewModel
-    private lateinit var image: ImageView
-    private lateinit var button: FloatingActionButton
     private lateinit var observerNewsArticle: Observer<List<Article>>
     private var article: Article? = null
     private var isFavourite = false
+
+    private lateinit var binding: FragmentArticleBinding
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_article, container, false)
-        image = root.findViewById(R.id.header)
-        button = root.findViewById(R.id.floating_button)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article, container, false)
         article = requireArguments().getParcelable(KEY_ARTICLE)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleViewModel::class.java)
+        binding.article = article
 
         try {
             GlideApp.with(requireContext())
                 .load(article!!.urlToImage)
-                .into(image)
+                .into(binding.header)
         } catch (ex: Exception) {
 
         }
 
-        button.setOnClickListener {
+        binding.floatingButton.setOnClickListener {
             isFavourite = if (!isFavourite) {
                 viewModel.insert(article)
                 true
@@ -71,7 +72,7 @@ class ArticleFragment : Fragment(), KodeinAware {
             }
             setButton(isFavourite)
         }
-        return root
+        return binding.root
     }
 
 
@@ -83,7 +84,6 @@ class ArticleFragment : Fragment(), KodeinAware {
                 setButton(isFavourite)
             }
         }
-        article_text.text = article!!.content
         setTitle()
         setToolbar()
         loadNews()
@@ -92,7 +92,6 @@ class ArticleFragment : Fragment(), KodeinAware {
     private fun setTitle() {
         val content = SpannableString(article!!.title)
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
-        article_title.text = content
         article_title.setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(article!!.url)))
         }
@@ -100,8 +99,8 @@ class ArticleFragment : Fragment(), KodeinAware {
 
     private fun setButton(isFavourite: Boolean) {
         if (isFavourite) {
-            button.setImageResource(R.drawable.icon_star_filled)
-            button.drawable.mutate()
+            binding.floatingButton.setImageResource(R.drawable.icon_star_filled)
+            binding.floatingButton.drawable.mutate()
                 .setTint(
                     ContextCompat.getColor(
                         requireContext(),
@@ -109,8 +108,8 @@ class ArticleFragment : Fragment(), KodeinAware {
                     )
                 )
         } else {
-            button.setImageResource(R.drawable.icon_star)
-            button.drawable.mutate()
+            binding.floatingButton.setImageResource(R.drawable.icon_star)
+            binding.floatingButton.drawable.mutate()
                 .setTint(
                     ContextCompat.getColor(
                         requireContext(),

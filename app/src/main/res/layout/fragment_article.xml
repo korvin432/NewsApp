@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="article"
+            type="com.mindyapps.android.newsapp.data.model.Article" />
+    </data>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -59,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="15dp"
                 android:autoLink="web"
+                android:text="@{article.title}"
                 android:clickable="true"
                 android:focusable="true"
                 android:textColor="@color/colorPrimary"
@@ -68,7 +77,8 @@
             <TextView
                 android:id="@+id/article_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@{article.content}" />
 
         </LinearLayout>
 
@@ -86,3 +96,5 @@
         app:maxImageSize="28dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>
