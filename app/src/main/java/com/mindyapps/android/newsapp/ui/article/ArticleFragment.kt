@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -50,13 +51,7 @@ class ArticleFragment : Fragment(), KodeinAware {
         viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleViewModel::class.java)
         binding.article = article
 
-        try {
-            GlideApp.with(requireContext())
-                .load(article!!.urlToImage)
-                .into(binding.header)
-        } catch (ex: Exception) {
 
-        }
 
         binding.floatingButton.setOnClickListener {
             isFavourite = if (!isFavourite) {
@@ -138,6 +133,21 @@ class ArticleFragment : Fragment(), KodeinAware {
                 isShow = false
             }
         })
+    }
+
+}
+
+
+@BindingAdapter("imageUrl")
+fun loadImage(view: ImageView, url: String?){
+    if (!url.isNullOrEmpty()) {
+        try {
+            GlideApp.with(view.context)
+                .load(url)
+                .into(view)
+        } catch (ex: Exception) {
+
+        }
     }
 
 }
