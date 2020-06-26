@@ -60,7 +60,7 @@ class SearchFragment : Fragment(), View.OnFocusChangeListener, SearchView.OnQuer
 
     private fun bindRecyclerView() {
         linearLayoutManager = LinearLayoutManager(requireContext())
-        newsRecyclerAdapter = NewsRecyclerAdapter(sourceList.toMutableList(), requireContext())
+        newsRecyclerAdapter = NewsRecyclerAdapter(sourceList.toMutableList())
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
         newsRecyclerAdapter.onItemClick = { article ->

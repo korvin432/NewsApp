@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="article"
+            type="com.mindyapps.android.newsapp.data.model.Article"/>
+    </data>
+
+<RelativeLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -22,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:maxHeight="350dp"
                 android:scaleType="fitXY"
+                app:imageUrl="@{article.urlToImage}"
                 android:adjustViewBounds="true"
                 android:layout_alignParentTop="true"/>
 
@@ -30,6 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+                android:text="@{article.author}"
                 android:layout_below="@id/article_image"
                 android:paddingHorizontal="8dp"
                 android:textSize="18sp"
@@ -39,6 +49,7 @@
                 android:id="@+id/textView_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@{article.description}"
                 android:layout_below="@id/textView_author"
                 android:paddingHorizontal="8dp"
                 android:layout_marginBottom="8dp"
@@ -50,3 +61,5 @@
     </androidx.cardview.widget.CardView>
 
 </RelativeLayout>
+
+</layout>

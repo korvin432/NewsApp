@@ -120,7 +120,7 @@ class DashboardFragment : ScopedFragment(), KodeinAware {
     private fun bindRecyclerView() {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         newsRecyclerAdapter =
-            NewsRecyclerAdapter(sourceList.toMutableList(), requireContext())
+            NewsRecyclerAdapter(sourceList.toMutableList())
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = newsRecyclerAdapter
         newsRecyclerAdapter.onItemClick = { article ->

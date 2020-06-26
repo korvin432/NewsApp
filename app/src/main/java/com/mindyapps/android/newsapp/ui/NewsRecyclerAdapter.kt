@@ -6,16 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.mindyapps.android.newsapp.R
 import com.mindyapps.android.newsapp.data.model.Article
+import com.mindyapps.android.newsapp.databinding.NewsItemBinding
 import com.mindyapps.android.newsapp.internal.GlideApp
 import kotlinx.android.synthetic.main.news_item.view.*
 
 class NewsRecyclerAdapter(
-    private var articles: MutableList<Article>,
-    private var context: Context
+    private var articles: MutableList<Article>
 ) : RecyclerView.Adapter<NewsRecyclerAdapter.NewsHolder>() {
 
     var onItemClick: ((Article) -> Unit)? = null
@@ -26,7 +27,8 @@ class NewsRecyclerAdapter(
     ): NewsHolder {
         val itemView: View =
             LayoutInflater.from(viewGroup.context).inflate(R.layout.news_item, viewGroup, false)
-        return NewsHolder(itemView)
+        val binding = NewsItemBinding.inflate(LayoutInflater.from(viewGroup.context))
+        return NewsHolder(itemView, binding)
     }
 
     override fun getItemCount(): Int {
@@ -35,7 +37,8 @@ class NewsRecyclerAdapter(
 
     override fun onBindViewHolder(holder: NewsHolder, position: Int) {
         val article: Article = articles[position]
-        setPropertiesForArticleViewHolder(holder, article)
+        holder.binding.article = article
+        holder.binding.executePendingBindings()
     }
 
     fun clearArticles() {
@@ -49,26 +52,22 @@ class NewsRecyclerAdapter(
         notifyDataSetChanged()
     }
 
-
-    private fun setPropertiesForArticleViewHolder(articleViewHolder: NewsHolder, article: Article) {
-        articleViewHolder.author.text = article.title
-        articleViewHolder.description.text = article.description
-        GlideApp.with(context)
-            .load(article.urlToImage)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            .into(articleViewHolder.image)
-    }
-
-    inner class NewsHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        val author: TextView by lazy { view.textView_author }
-        val description: TextView by lazy { view.textView_description }
-        val image: ImageView by lazy { view.article_image }
-
+    inner class NewsHolder(private val view: View, val binding: NewsItemBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
                 onItemClick?.invoke(articles[adapterPosition])
             }
         }
+    }
+}
+
+@BindingAdapter("imageUrl")
+fun loadImage(view: ImageView, url: String?){
+    if (!url.isNullOrEmpty()) {
+        GlideApp.with(view.context)
+            .load(url)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .into(view)
     }
 }
