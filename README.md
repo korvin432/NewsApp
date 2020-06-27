@@ -21,7 +21,7 @@ The app uses ViewModel to abstract the data from UI and Repository as single sou
 
 # Goals
                 
-+ Data Binding
-+ Process death
-+ SearchView suggestions
+- [x] Data Binding
+- [ ] Process death
+- [ ] SearchView suggestions
 
